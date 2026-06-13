@@ -72,6 +72,11 @@ public class HexGridManager : MonoBehaviour
         return new Vector3(x, y, 0);
     }
 
+    public Vector2Int GetCoordinates(HexCell cell)
+    {
+        return cell.Coordinates;
+    }
+
     public HexCell GetCell(Vector2Int coord)
     {
         cells.TryGetValue(coord, out HexCell cell);
@@ -99,6 +104,14 @@ public class HexGridManager : MonoBehaviour
         }
 
         return closest;
+    }
+    public bool IsPositionInsideGrid(Vector3 worldPosition)
+    {
+        HexCell closest = GetClosestCell(worldPosition);
+
+        float distance = Vector3.Distance(worldPosition, closest.transform.position);
+
+        return distance < 0.8f;
     }
 
 }

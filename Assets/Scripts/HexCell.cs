@@ -5,6 +5,7 @@ public class HexCell : MonoBehaviour
     public Vector2Int Coordinates { get; private set; }
     public Vector3 WorldPosition => transform.position;
     public int Value { get; private set; }
+    public NumberPiece OccupyingPiece { get; private set; }
 
     public void Initialize(int q, int r)
     {
@@ -23,9 +24,11 @@ public class HexCell : MonoBehaviour
 
     public bool IsOccupied { get; private set; }
 
-    public void SetOccupied(bool occupied)
+    public void SetOccupied(NumberPiece piece)
     {
-        IsOccupied = occupied;
+        OccupyingPiece = piece;
+        IsOccupied = piece != null;
+        
     }
 
 }

@@ -15,6 +15,11 @@ public class NumberPiece : MonoBehaviour
     private int numberA;
     private int numberB;
     private int rotationIndex;
+    public int RotationIndex => rotationIndex;
+    public Transform HexA => hexA;
+    public Transform HexB => hexB;
+    public bool IsPlaced { get; private set; }
+
     private readonly Vector2[] directions =
        {
         new( 1f, 0f),
@@ -24,6 +29,7 @@ public class NumberPiece : MonoBehaviour
         new(-0.5f,-0.866f),
         new( 0.5f,-0.866f)
     };
+
 
     public void Setup(int a, int b)
     {
@@ -47,9 +53,10 @@ public class NumberPiece : MonoBehaviour
         UpdateLayout();
     }
 
-    private void OnMouseDown()
+
+    public void MarkAsPlaced()
     {
-        RotateClockwise();
+        IsPlaced = true;
     }
 
     private void UpdateLayout()
