@@ -101,7 +101,6 @@ public class NumberPiece : MonoBehaviour
                 hexB.localPosition = new Vector3(diagonalX, -diagonalY, 0);
                 break;
         }
-        Debug.Log(hexA.localPosition);
     }
 
     public void HideTexts()

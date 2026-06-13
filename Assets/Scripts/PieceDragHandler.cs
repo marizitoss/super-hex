@@ -118,6 +118,7 @@ public class PieceDragHandler : MonoBehaviour
         PieceSpawner.Instance.AddToPool(finalB);
         PieceSpawner.Instance.ReleaseCurrent();
         PieceSpawner.Instance.SpawnNewPiece();
+        PieceSpawner.Instance.RegisterPlacement();
     }
 
     private void UpdatePlacementPreview()

@@ -54,8 +54,6 @@ public class HexCell : MonoBehaviour
 
     public void ShowValidPlacement()
     {
-        Debug.Log($"Highlight {Coordinates}");
-
         highlightRenderer.enabled = true;
     }
 

@@ -6,9 +6,10 @@ public class PieceSpawner : MonoBehaviour
     public static PieceSpawner Instance { get; private set; }
     [SerializeField] private NumberPiece piecePrefab;
     [SerializeField] private Transform spawnPoint;
-
     private int[] numberPool = { 1, 2, 3 };
     private NumberPiece currentPiece;
+    private int piecesPlaced = 0;
+    private const int MaxPieces = 6;
 
     private void Awake()
     {
@@ -48,5 +49,22 @@ public class PieceSpawner : MonoBehaviour
 
         System.Array.Resize(ref numberPool, numberPool.Length + 1);
         numberPool[numberPool.Length - 1] = value;
+    }
+
+    public void RegisterPlacement()
+    {
+        piecesPlaced++;
+        Debug.Log($"Peças colocadas: {piecesPlaced}/{MaxPieces}");
+
+        if (piecesPlaced >= MaxPieces)
+        {
+            Debug.Log("Jogo encerrado!");
+            if (currentPiece != null) Destroy(currentPiece.gameObject);
+            gameObject.SetActive(false);
+
+            return;
+        }
+
+        SpawnNewPiece();
     }
 }
