@@ -10,18 +10,18 @@ public class HexGridManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private HexCell cellPrefab;
 
-    private Dictionary<Vector2Int, HexCell> cells =
-        new Dictionary<Vector2Int, HexCell>();
+    private Dictionary<Vector2Int, HexCell> cells = new Dictionary<Vector2Int, HexCell>();
 
     private float cellWidth;
     private float cellHeight;
 
     private void Start()
     {
-        SpriteRenderer sr = cellPrefab.GetComponent<SpriteRenderer>();
-
+        SpriteRenderer sr = cellPrefab.GetComponentInChildren<SpriteRenderer>();
         cellWidth = sr.bounds.size.x;
         cellHeight = sr.bounds.size.y;
+
+        HexSettings.Initialize(cellWidth, cellHeight);
 
         GenerateGrid();
     }
@@ -40,6 +40,7 @@ public class HexGridManager : MonoBehaviour
     private void CreateCell(int q, int r)
     {
         Vector3 pos = GetPosition(q, r);
+
 
         HexCell cell = Instantiate(
             cellPrefab,
@@ -69,7 +70,7 @@ public class HexGridManager : MonoBehaviour
 
         float y = -row * verticalSpacing;
 
-        return new Vector3(x, y, 0);
+        return transform.position + new Vector3(x, y, 0);
     }
 
     public Vector2Int GetCoordinates(HexCell cell)
@@ -111,7 +112,7 @@ public class HexGridManager : MonoBehaviour
 
         float distance = Vector3.Distance(worldPosition, closest.transform.position);
 
-        return distance < 0.8f;
+        return distance < cellHeight * 0.6f;
     }
 
 }

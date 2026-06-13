@@ -9,9 +9,6 @@ public class NumberPiece : MonoBehaviour
     [SerializeField] private TMP_Text textA;
     [SerializeField] private TMP_Text textB;
     [SerializeField] private SpriteRenderer hexSprite;
-    [SerializeField] private float hexDistance = 1.9f;
-    [SerializeField] private float diagonalX = 1.27f;
-    [SerializeField] private float diagonalY = 1.90f;
     private int numberA;
     private int numberB;
     private int rotationIndex;
@@ -30,6 +27,10 @@ public class NumberPiece : MonoBehaviour
         new( 0.5f,-0.866f)
     };
 
+    private void Awake()
+    {
+        UpdateLayout();
+    }
 
     public void Setup(int a, int b)
     {
@@ -38,6 +39,8 @@ public class NumberPiece : MonoBehaviour
 
         textA.text = a.ToString();
         textB.text = b.ToString();
+
+        UpdateLayout();
     }
 
     public void SetRotation(int index)
@@ -56,12 +59,19 @@ public class NumberPiece : MonoBehaviour
 
     public void MarkAsPlaced()
     {
+
         IsPlaced = true;
     }
 
     private void UpdateLayout()
     {
         hexA.localPosition = Vector3.zero;
+
+        if (HexSettings.CellWidth == 0) return;
+
+        float hexDistance = HexSettings.HorizontalSpacing;
+        float diagonalX = HexSettings.DiagonalX;
+        float diagonalY = HexSettings.DiagonalY;
 
         switch (rotationIndex)
         {
@@ -89,5 +99,6 @@ public class NumberPiece : MonoBehaviour
                 hexB.localPosition = new Vector3(diagonalX, -diagonalY, 0);
                 break;
         }
+        Debug.Log(hexA.localPosition);
     }
 }
