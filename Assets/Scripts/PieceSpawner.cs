@@ -3,11 +3,17 @@ using System.Collections;
 
 public class PieceSpawner : MonoBehaviour
 {
+    public static PieceSpawner Instance { get; private set; }
     [SerializeField] private NumberPiece piecePrefab;
     [SerializeField] private Transform spawnPoint;
 
     private int[] numberPool = { 1, 2, 3 };
     private NumberPiece currentPiece;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private IEnumerator Start()
     {
@@ -28,5 +34,10 @@ public class PieceSpawner : MonoBehaviour
         currentPiece.SetRotation(Random.Range(0, 6));
 
         currentPiece.Setup(a, b);
+    }
+
+    public void ReleaseCurrent()
+    {
+        currentPiece = null;
     }
 }

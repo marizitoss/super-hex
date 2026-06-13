@@ -122,14 +122,9 @@ public class PieceDragHandler : MonoBehaviour
 
         cellA.SetOccupied(piece);
         cellB.SetOccupied(piece);
-
-        Debug.Log($"HexA World: {piece.HexA.position}");
-        Debug.Log($"CellA World: {cellA.transform.position}");
-
-        Debug.Log($"HexB World: {piece.HexB.position}");
-        Debug.Log($"CellB World: {cellB.transform.position}");
-
         piece.MarkAsPlaced();
+        PieceSpawner.Instance.ReleaseCurrent();
+        PieceSpawner.Instance.SpawnNewPiece();
     }
 
     private void UpdatePlacementPreview()
