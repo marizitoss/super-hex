@@ -15,14 +15,17 @@ public class HexGridManager : MonoBehaviour
     private float cellWidth;
     private float cellHeight;
 
-    private void Start()
+    private void Awake()
     {
         SpriteRenderer sr = cellPrefab.GetComponentInChildren<SpriteRenderer>();
         cellWidth = sr.bounds.size.x;
         cellHeight = sr.bounds.size.y;
 
         HexSettings.Initialize(cellWidth, cellHeight);
+    }
 
+    private void Start()
+    {
         GenerateGrid();
     }
 
@@ -55,11 +58,9 @@ public class HexGridManager : MonoBehaviour
 
     private Vector3 GetPosition(int column, int row)
     {
-        float horizontalSpacing =
-        cellWidth * HexSettings.HorizontalSpacingMultiplier;
+        float horizontalSpacing = cellWidth * HexSettings.HorizontalSpacingMultiplier;
 
-        float verticalSpacing =
-            cellHeight * HexSettings.VerticalSpacingMultiplier;
+        float verticalSpacing = cellHeight * HexSettings.VerticalSpacingMultiplier;
 
         float x = column * horizontalSpacing;
 
@@ -109,10 +110,9 @@ public class HexGridManager : MonoBehaviour
     public bool IsPositionInsideGrid(Vector3 worldPosition)
     {
         HexCell closest = GetClosestCell(worldPosition);
-
         float distance = Vector3.Distance(worldPosition, closest.transform.position);
 
-        return distance < cellHeight * 0.6f;
+        return distance < HexSettings.HorizontalSpacing * 0.75f;
     }
 
 }
