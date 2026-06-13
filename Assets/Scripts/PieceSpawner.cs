@@ -40,4 +40,13 @@ public class PieceSpawner : MonoBehaviour
     {
         currentPiece = null;
     }
+
+    public void AddToPool(int value)
+    {
+        foreach (int n in numberPool)
+            if (n == value) return;
+
+        System.Array.Resize(ref numberPool, numberPool.Length + 1);
+        numberPool[numberPool.Length - 1] = value;
+    }
 }

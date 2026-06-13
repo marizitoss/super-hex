@@ -200,7 +200,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 17.940441, w: 0}
+  m_margin: {x: -5.2944527, y: 0, z: 11.442697, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 17.054523, w: 0}
+  m_margin: {x: -5.4147787, y: 0, z: 11.699906, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -435,6 +435,7 @@ MonoBehaviour:
   validColor: {r: 0, g: 1, b: 0, a: 1}
   highlightRenderer: {fileID: 540142955965106448}
   spriteRenderer: {fileID: 8687869427429968763}
+  valueText: {fileID: 0}
 --- !u!1 &4198027288077474530
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +660,7 @@ MonoBehaviour:
   validColor: {r: 0, g: 1, b: 0, a: 1}
   highlightRenderer: {fileID: 7580071547393767594}
   spriteRenderer: {fileID: 3960163238072863053}
+  valueText: {fileID: 0}
 --- !u!1 &5746381889159501259
 GameObject:
   m_ObjectHideFlags: 0

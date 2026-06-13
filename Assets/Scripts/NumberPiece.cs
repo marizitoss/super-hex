@@ -16,6 +16,8 @@ public class NumberPiece : MonoBehaviour
     public Transform HexA => hexA;
     public Transform HexB => hexB;
     public bool IsPlaced { get; private set; }
+    public int NumberA => numberA;
+    public int NumberB => numberB;
 
     private readonly Vector2[] directions =
        {
@@ -100,5 +102,11 @@ public class NumberPiece : MonoBehaviour
                 break;
         }
         Debug.Log(hexA.localPosition);
+    }
+
+    public void HideTexts()
+    {
+        textA.gameObject.SetActive(false);
+        textB.gameObject.SetActive(false);
     }
 }

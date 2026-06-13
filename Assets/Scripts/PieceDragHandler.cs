@@ -4,12 +4,15 @@ public class PieceDragHandler : MonoBehaviour
 {
     private Vector3 dragOffset;
     private bool isDragging;
-    private Vector3 mouseDownPosition;
     private bool hasDragged;
     private bool mouseHeld;
+    private Vector3 mouseDownPosition;
     private Vector3 spawnPosition;
     private HexCell previewCellA;
     private HexCell previewCellB;
+
+    private HexGridManager Grid => FindFirstObjectByType<HexGridManager>();
+    private NumberPiece Piece => GetComponent<NumberPiece>();
 
     private void Awake()
     {
@@ -18,145 +21,149 @@ public class PieceDragHandler : MonoBehaviour
 
     private void Update()
     {
-        if (!mouseHeld)
-            return;
+        if (!mouseHeld) return;
 
-        Vector3 currentMouse =
-            Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouse = MouseWorldPos();
 
-        currentMouse.z = 0;
-
-        if (!hasDragged)
+        if (!hasDragged && Vector3.Distance(mouse, mouseDownPosition) > 0.2f)
         {
-            float distance = Vector3.Distance(currentMouse, mouseDownPosition);
-
-            if (distance > 0.2f)
-            {
-                hasDragged = true;
-                isDragging = true;
-            }
+            hasDragged = true;
+            isDragging = true;
         }
 
-        if (!isDragging || !hasDragged)
-            return;
+        if (!isDragging) return;
 
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        mouseWorld.z = 0;
-
-        transform.position = mouseWorld + dragOffset;
-
+        transform.position = mouse + dragOffset;
         UpdatePlacementPreview();
     }
 
     private void OnMouseDown()
     {
-        NumberPiece piece = GetComponent<NumberPiece>();
-
-        if (piece.IsPlaced)
-            return;
+        if (Piece.IsPlaced) return;
 
         mouseHeld = true;
-
-        mouseDownPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        mouseDownPosition.z = 0;
-
         hasDragged = false;
-
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        mouseWorld.z = 0;
-
-        dragOffset = transform.position - mouseWorld;
+        mouseDownPosition = MouseWorldPos();
+        dragOffset = transform.position - mouseDownPosition;
     }
 
     private void OnMouseUp()
     {
-        previewCellA?.ResetColor();
-
-        previewCellB?.ResetColor();
+        ClearPreview();
 
         mouseHeld = false;
         isDragging = false;
 
         if (!hasDragged)
         {
-            GetComponent<NumberPiece>().RotateClockwise();
-
+            Piece.RotateClockwise();
             return;
         }
 
-        NumberPiece piece = GetComponent<NumberPiece>();
+        if (Piece.IsPlaced) return;
 
-        if (piece.IsPlaced) return;
+        TryPlacePiece();
+    }
 
-        isDragging = false;
+    private void TryPlacePiece()
+    {
+        HexGridManager grid = Grid;
+        NumberPiece piece = Piece;
 
-        HexGridManager grid = FindFirstObjectByType<HexGridManager>();
-
-        HexCell cellA = grid.GetClosestCell(piece.HexA.position);
-
-        HexCell cellB = grid.GetClosestCell(piece.HexB.position);
-
-        bool hexAValid = grid.IsPositionInsideGrid(piece.HexA.position);
-
-        bool hexBValid = grid.IsPositionInsideGrid(piece.HexB.position);
-
-        if (!hexAValid || !hexBValid)
+        if (!grid.IsPositionInsideGrid(piece.HexA.position) ||
+            !grid.IsPositionInsideGrid(piece.HexB.position))
         {
-
-            transform.position = spawnPosition;
-
+            ReturnToSpawn();
             return;
         }
 
-        piece.transform.position = cellA.transform.position;
+        HexCell targetA = grid.GetClosestCell(piece.HexA.position);
+        HexCell targetB = grid.GetClosestCell(piece.HexB.position);
 
-        if (cellA.IsOccupied || cellB.IsOccupied)
+        if (targetA == targetB)
         {
-            transform.position = spawnPosition;
-
+            ReturnToSpawn();
             return;
         }
 
-        cellA.SetOccupied(piece);
-        cellB.SetOccupied(piece);
-        piece.MarkAsPlaced();
+        bool canPlaceA = !targetA.IsOccupied || targetA.Value == piece.NumberA;
+        bool canPlaceB = !targetB.IsOccupied || targetB.Value == piece.NumberB;
+
+        if (!canPlaceA || !canPlaceB)
+        {
+            ReturnToSpawn();
+            return;
+        }
+
+        PlacePiece(piece, targetA, targetB);
+    }
+
+    private void PlacePiece(NumberPiece piece, HexCell targetA, HexCell targetB)
+    {
+        int finalA = targetA.IsOccupied ? targetA.Value + piece.NumberA : piece.NumberA;
+        int finalB = targetB.IsOccupied ? targetB.Value + piece.NumberB : piece.NumberB;
+
+        NumberPiece oldA = targetA.OccupyingPiece;
+        NumberPiece oldB = targetB.OccupyingPiece;
+
+        targetA.SetOccupied(piece, finalA);
+        targetB.SetOccupied(piece, finalB);
+
+        if (oldA != null) Destroy(oldA.gameObject);
+        if (oldB != null) Destroy(oldB.gameObject);
+
+        Destroy(piece.gameObject);
+
+        PieceSpawner.Instance.AddToPool(finalA);
+        PieceSpawner.Instance.AddToPool(finalB);
         PieceSpawner.Instance.ReleaseCurrent();
         PieceSpawner.Instance.SpawnNewPiece();
     }
 
     private void UpdatePlacementPreview()
     {
+        ClearPreview();
 
-        HexGridManager grid = FindFirstObjectByType<HexGridManager>();
+        HexGridManager grid = Grid;
+        NumberPiece piece = Piece;
 
+        if (!grid.IsPositionInsideGrid(piece.HexA.position) ||
+            !grid.IsPositionInsideGrid(piece.HexB.position)) return;
+
+        HexCell targetA = grid.GetClosestCell(piece.HexA.position);
+        HexCell targetB = grid.GetClosestCell(piece.HexB.position);
+
+        if (targetA == targetB) return;
+
+        bool canPlaceA = !targetA.IsOccupied || targetA.Value == piece.NumberA;
+        bool canPlaceB = !targetB.IsOccupied || targetB.Value == piece.NumberB;
+
+        if (!canPlaceA || !canPlaceB) return;
+
+        targetA.ShowValidPlacement();
+        targetB.ShowValidPlacement();
+
+        previewCellA = targetA;
+        previewCellB = targetB;
+    }
+
+    private void ClearPreview()
+    {
         previewCellA?.ResetColor();
-
         previewCellB?.ResetColor();
+        previewCellA = null;
+        previewCellB = null;
+    }
 
-        NumberPiece piece =
-            GetComponent<NumberPiece>();
+    private void ReturnToSpawn()
+    {
+        transform.position = spawnPosition;
+    }
 
-        HexCell cellA = grid.GetClosestCell(piece.HexA.position);
-
-        HexCell cellB = grid.GetClosestCell(piece.HexB.position);
-
-        bool validA = grid.IsPositionInsideGrid(piece.HexA.position);
-
-        bool validB = grid.IsPositionInsideGrid(piece.HexB.position);
-
-        Debug.Log($"A={validA} B={validB}");
-
-        if (!validA || !validB) return;
-
-        if (cellA.IsOccupied || cellB.IsOccupied) return;
-
-        cellA.ShowValidPlacement();
-        cellB.ShowValidPlacement();
-
-        previewCellA = cellA;
-        previewCellB = cellB;
+    private Vector3 MouseWorldPos()
+    {
+        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        pos.z = 0;
+        return pos;
     }
 }
