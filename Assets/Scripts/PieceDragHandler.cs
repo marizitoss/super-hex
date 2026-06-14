@@ -10,7 +10,6 @@ public class PieceDragHandler : MonoBehaviour
     private Vector3 spawnPosition;
     private HexCell previewCellA;
     private HexCell previewCellB;
-
     private HexGridManager Grid => FindFirstObjectByType<HexGridManager>();
     private NumberPiece Piece => GetComponent<NumberPiece>();
 
@@ -103,11 +102,14 @@ public class PieceDragHandler : MonoBehaviour
         int finalA = targetA.IsOccupied ? targetA.Value + piece.NumberA : piece.NumberA;
         int finalB = targetB.IsOccupied ? targetB.Value + piece.NumberB : piece.NumberB;
 
+        Color colorA = PieceSpawner.Instance.GetColorForNumber(finalA);
+        Color colorB = PieceSpawner.Instance.GetColorForNumber(finalB);
+
         NumberPiece oldA = targetA.OccupyingPiece;
         NumberPiece oldB = targetB.OccupyingPiece;
 
-        targetA.SetOccupied(piece, finalA);
-        targetB.SetOccupied(piece, finalB);
+        targetA.SetOccupied(piece, finalA, colorA);
+        targetB.SetOccupied(piece, finalB, colorB);
 
         if (oldA != null) Destroy(oldA.gameObject);
         if (oldB != null) Destroy(oldB.gameObject);

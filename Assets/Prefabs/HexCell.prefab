@@ -228,6 +228,7 @@ MonoBehaviour:
   highlightRenderer: {fileID: 540142955965106448}
   spriteRenderer: {fileID: 8687869427429968763}
   valueText: {fileID: 5618063097466528186}
+  baseHexRenderer: {fileID: 8687869427429968763}
 --- !u!1 &4920010973383418477
 GameObject:
   m_ObjectHideFlags: 0

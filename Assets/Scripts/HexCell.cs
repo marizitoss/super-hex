@@ -8,6 +8,8 @@ public class HexCell : MonoBehaviour
     [SerializeField] private SpriteRenderer highlightRenderer;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private TMP_Text valueText;
+    [SerializeField] private SpriteRenderer baseHexRenderer;
+
 
     public Vector2Int Coordinates { get; private set; }
     public Vector3 WorldPosition => transform.position;
@@ -44,12 +46,13 @@ public class HexCell : MonoBehaviour
 
     public bool IsOccupied { get; private set; }
 
-    public void SetOccupied(NumberPiece piece, int value)
+    public void SetOccupied(NumberPiece piece, int value, Color color)
     {
         OccupyingPiece = piece;
         IsOccupied = piece != null;
         Value = value;
         UpdateVisual();
+        SetBaseColor(color);
     }
 
     public void ShowValidPlacement()
@@ -60,5 +63,11 @@ public class HexCell : MonoBehaviour
     public void ResetColor()
     {
         highlightRenderer.enabled = false;
+    }
+
+    public void SetBaseColor(Color color)
+    {
+        if (baseHexRenderer != null)
+            baseHexRenderer.color = color;
     }
 }

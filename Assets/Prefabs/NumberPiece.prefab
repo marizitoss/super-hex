@@ -435,7 +435,8 @@ MonoBehaviour:
   validColor: {r: 0, g: 1, b: 0, a: 1}
   highlightRenderer: {fileID: 540142955965106448}
   spriteRenderer: {fileID: 8687869427429968763}
-  valueText: {fileID: 0}
+  valueText: {fileID: 6280756073760017292}
+  baseHexRenderer: {fileID: 8687869427429968763}
 --- !u!1 &4198027288077474530
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +661,8 @@ MonoBehaviour:
   validColor: {r: 0, g: 1, b: 0, a: 1}
   highlightRenderer: {fileID: 7580071547393767594}
   spriteRenderer: {fileID: 3960163238072863053}
-  valueText: {fileID: 0}
+  valueText: {fileID: 5674807590425723890}
+  baseHexRenderer: {fileID: 3960163238072863053}
 --- !u!1 &5746381889159501259
 GameObject:
   m_ObjectHideFlags: 0

@@ -102,10 +102,15 @@ public class NumberPiece : MonoBehaviour
                 break;
         }
     }
-
     public void HideTexts()
     {
         textA.gameObject.SetActive(false);
         textB.gameObject.SetActive(false);
+    }
+
+    public void ApplyColors(Color colorA, Color colorB)
+    {
+        HexA.GetComponentInChildren<HexCell>().SetBaseColor(colorA);
+        HexB.GetComponentInChildren<HexCell>().SetBaseColor(colorB);
     }
 }
