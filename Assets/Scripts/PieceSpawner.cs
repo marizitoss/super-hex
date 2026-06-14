@@ -77,6 +77,7 @@ public class PieceSpawner : MonoBehaviour
             Debug.Log("Jogo encerrado!");
             if (currentPiece != null) Destroy(currentPiece.gameObject);
             gameObject.SetActive(false);
+            GameManager.Instance.ShowFinalScore();
 
             return;
         }

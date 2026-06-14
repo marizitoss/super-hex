@@ -1,8 +1,7 @@
 
 public static class HexSettings
 {
-    public const float GapMultiplier = 1.02f;
-
+    public const float GapMultiplier = 0.85f;
     public const float HorizontalSpacingMultiplier = 1.2f * GapMultiplier;
     public const float VerticalSpacingMultiplier = 0.866f * GapMultiplier;
 
