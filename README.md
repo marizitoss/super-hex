@@ -44,7 +44,7 @@ Players receive a piece containing two randomly generated numbers. The goal is t
 
 - **Engine:** Unity
 
-## Where I can find the game?
+## Where can I find the game?
 [Super Hex](https://marizitoss.itch.io/superhex)
 
 
